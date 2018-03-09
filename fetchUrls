@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# v. 1.0.1
+
+GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+display_usage() {
+    printf "${ORANGE}[!]${NC} This script needs an url.\n"
+    printf "${ORANGE}[!]${NC} Usage: ./fetchUrls http(s)://www.example.com \n"
+    }
+# if no argument supplied, display usage
+    if [ $# -eq 0 ]
+    then
+        display_usage
+        exit 1
+    fi
+
+# -h or --help display usage
+    if [[ ( $# == "--help") ||  $# == "-h" ]]
+    then
+        display_usage
+        exit 0
+    fi
+
+regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+if [[ $1 =~ $regex ]]
+then
+    printf "${GREEN}[*]${NC} Starting spider...\n"
+    printf "${GREEN}[*]${NC} Fetchung urls for: $1\n"
+    wget --spider -r -nd -nv -l 0 -o domains.csv $1
+    cat domains.csv | awk '{print $3}' | grep http | awk '{split($0,a,"URL:"); print a[2]}' | sort -u > urls.txt
+    printf "${GREEN}[*]${NC} Done. Check urls.txt\n"
+
+else
+    printf "${RED}[!]${NC} $1 is not a valid url or I didn't understand it."
+fi
+

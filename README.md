@@ -1,2 +1,10 @@
 # Spidey
-Fetch urls of a given website then go through all of them and send a request each.
+Fetch links of a website.
+
+## Usage
+
+```bash
+./fetchUrls http(s)://www.example.com
+```
+## Changelog
+All notable changes to this project will be documented in [CHANGELOG.md](CHANGELOG.md)
